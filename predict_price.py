@@ -7,6 +7,6 @@ def predict_price(miles):
     return 28000 - 0.2 * miles
 
 
-for miles in [20000, 40000, 60000]:
+for miles in [20000, 40000, 60000, 80000]:
     price = predict_price(miles)
     print(price)
