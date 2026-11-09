@@ -13,6 +13,8 @@ A phone-friendly focus check lives in [`focus-tracker/`](focus-tracker/). It rec
 
 Two small-business samples live in [`fiverr-samples/`](fiverr-samples/): a monthly sales forecast on public U.S. Census clothing-store sales, and a call-list score on the UCI Bank Marketing dataset. Each folder has a script, a chart, and a plain-English report.
 
+[`jobkit/`](jobkit/) is the reusable command for the next client file: one CSV in, a draft report and chart out. Jon still checks leakage, the metric, and the wording before anything is sent.
+
 ## First exercise: a hand-written price rule
 
 `predict_price.py` is practice for `def`, `return`, calling a function, `print`, and a `for` loop.
