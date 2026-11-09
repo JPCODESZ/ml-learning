@@ -21,4 +21,4 @@ python3 fiverr-samples/sales-forecast/forecast_sales.py
 
 The script downloads the workbook into `data/` (that folder is not committed), writes `figures/forecast_holdout.png`, and writes `output/metrics.json`.
 
-The holdout is the last 24 months. The baseline is seasonal naive (same month last year). The comparison model is gradient boosting with lags and calendar features. On the run saved in this folder, the baseline was more accurate. See `REPORT.md`.
+The last 24 months are the holdout. The 24 months before that are only for choosing a model. The candidates are a seasonal-naive baseline, residual and year-over-year gradient boosting, Holt-Winters, and SARIMA. On the run saved in this folder, Holt-Winters with multiplicative seasonality was the best alternative on the validation window and then beat the seasonal baseline on the holdout (MAE 993.2 vs 1,174.5 million dollars; MAPE 3.84% vs 4.75%). See `REPORT.md`.

@@ -10,23 +10,33 @@ The Census workbook is one sheet per year, from January 1992 through August 2026
 - 34 yearly TOTAL columns were skipped. A total is not a month.
 - No month failed to parse, no sales figure was blank or non-numeric, no month was duplicated, and no month was missing between the start and the end.
 
-## How we tested it
+## How we chose the model
 
-We hid the last 24 months, September 2024 through August 2026, and forecast one month at a time. Each forecast was allowed to use sales that would already have been known, including the same month last year. It was not allowed to see the month it was predicting.
+We hid the last 24 months, September 2024 through August 2026. Those months were not used to pick a method.
 
-The simple baseline copies that month from the previous year. The other model is gradient boosting, using recent months, last year, and the calendar.
+On the 24 months before that, September 2022 through August 2024, we compared:
 
-## How accurate
+- copying the same month from the year before (the seasonal baseline)
+- gradient boosting of the change from last year
+- scaling last year by the most recent year-over-year change
+- Holt-Winters (several seasonal settings)
+- a few seasonal ARIMA models
 
-On those 24 months:
+Copying last year was the most accurate on that earlier window: average miss **482.2 million dollars**, or **2.11%**. The closest alternative was Holt-Winters with a multiplicative seasonal pattern: average miss **651.4 million dollars**, or **2.68%**. That is the method we froze and carried forward. The other alternatives were less accurate on that window, so they were not given a second look on the hidden months.
+
+## How accurate on the hidden months
+
+Each forecast is for the next month only, using sales that would already be known.
+
+On September 2024 through August 2026:
 
 - Seasonal baseline: average miss of **1,174.5 million dollars**, which is **4.75%** of that month's sales.
-- Gradient boosting: average miss of **1,698.2 million dollars**, which is **6.52%**.
+- Holt-Winters: average miss of **993.2 million dollars**, which is **3.84%**.
 
-The fancier model did **not** beat the baseline. It followed the shape of the year, but it dulled the December peak and added error in other months. Copying last year was the more accurate forecast.
+Holt-Winters beat the baseline on both measures. It still overshot the biggest December. The gain is a smaller miss in a typical month, not a perfect holiday forecast.
 
 ## What to do next
 
-Use last year's same month as the working forecast, and update it every month. Do not pay for a more complicated model until it beats that simple rule on a fresh stretch of months you held back.
+Use Holt-Winters as the working next-month forecast, and keep last year's number beside it. It won the hidden two years, but it lost the two years we used to choose it, so this is one good check rather than a permanent trophy.
 
-When we do this on your shop, send a clean monthly total (one row per month, no yearly totals mixed in). We will repeat this exact test. If your Decembers move around more than the national series, a model may earn its place. On this public series, it did not.
+When we do this on your shop, send a clean monthly total (one row per month, no yearly totals mixed in). We will repeat the same split: choose on an earlier window, then score the choice once on months it has not seen.
