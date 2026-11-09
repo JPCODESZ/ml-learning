@@ -5,6 +5,10 @@ learning ml
 
 A phone-friendly focus check lives in [`focus-tracker/`](focus-tracker/). It records a reaction-time and digit-span score plus a few context answers. Those results stay in the phone browser. They are not stored in this repo and are not sent anywhere. After GitHub Pages is enabled (Settings > Pages > Source: GitHub Actions), the app is at https://jpcodesz.github.io/ml-learning/. A later lesson will train a neural network on the exported CSV.
 
+## Space debris
+
+[`space-debris/close_pass.py`](space-debris/close_pass.py) estimates how close the ISS comes to objects in a real debris cloud over the next day. It is a starter for a later model, not a collision warning. See [`space-debris/README.md`](space-debris/README.md).
+
 ## First exercise: a hand-written price rule
 
 `predict_price.py` is practice for `def`, `return`, calling a function, `print`, and a `for` loop.
