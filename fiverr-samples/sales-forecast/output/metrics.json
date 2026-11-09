@@ -1,0 +1,31 @@
+{
+  "series": "Clothing and clothing access. stores",
+  "unit": "millions of U.S. dollars",
+  "adjustment": "not seasonally adjusted",
+  "holdout_months": 24,
+  "holdout_start": "2024-09",
+  "holdout_end": "2026-08",
+  "cleanup": {
+    "rows_read": 416,
+    "unparseable_dates": 0,
+    "non_numeric_sales": 0,
+    "sheets_read": 35,
+    "adjusted_values_left_out": 35,
+    "total_columns_left_out": 34,
+    "duplicate_months_removed": 0,
+    "missing_months": [],
+    "months_kept": 416,
+    "start": "1992-01",
+    "end": "2026-08"
+  },
+  "baseline_seasonal_naive": {
+    "mae_million": 1174.5416666666667,
+    "mape_percent": 4.7478903200112
+  },
+  "gradient_boosting": {
+    "mae_million": 1698.158300195894,
+    "mape_percent": 6.524248470181597
+  },
+  "boosting_beats_baseline_on_mae": false,
+  "boosting_beats_baseline_on_mape": false
+}
