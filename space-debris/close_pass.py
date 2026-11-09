@@ -13,6 +13,7 @@
 # second. The relative speed says how fast that gap is changing and how
 # hard a hit would be. A later model will use both.
 
+import argparse
 import csv
 import math
 import urllib.request
@@ -176,6 +177,7 @@ def closest_pass(iss_states, debris_states, times, debris):
                 "miss_distance_km": distance_km,
                 "relative_speed_km_s": vector_length(relative_velocity),
                 "altitude_km": altitude_km,
+                "tle_epoch_utc": epoch.strftime("%Y-%m-%d %H:%M:%S"),
                 "tle_age_days": tle_age_days,
             }
     return best
@@ -185,7 +187,24 @@ def load_satellite(record):
     return Satrec.twoline2rv(record["line1"], record["line2"])
 
 
+def parse_args():
+    """Read an optional output path. With no arguments, keep the original CSV path."""
+    parser = argparse.ArgumentParser(
+        description="Estimate the ISS's closest debris passes over the next day."
+    )
+    parser.add_argument(
+        "--output",
+        default=str(OUTPUT_CSV),
+        help="Where to write the CSV. Defaults to space-debris/close_passes.csv.",
+    )
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
+    output_path = Path(args.output)
+    # One download per group. A fresh GitHub runner has no cache, so a daily
+    # run fetches stations once and the debris group once, then saves them.
     station_text = download_group(STATION_GROUP)
     debris_text = download_group(DEBRIS_GROUP)
     stations = parse_tles(station_text)
@@ -223,6 +242,19 @@ def main():
 
     passes.sort(key=lambda item: item["miss_distance_km"])
 
+    # run_date and snapshot_time_utc mark when this file was produced.
+    # tle_epoch_utc is the debris snapshot's own epoch, so a later day can
+    # tell whether a new orbit update changed the miss distance.
+    # iss_tle_epoch_utc is the ISS snapshot used for the whole file.
+    snapshot = start
+    run_date = snapshot.strftime("%Y-%m-%d")
+    snapshot_time_utc = snapshot.strftime("%Y-%m-%d %H:%M:%S")
+    iss_epoch = epoch_datetime(iss_record["line1"]).strftime("%Y-%m-%d %H:%M:%S")
+    for approach in passes:
+        approach["run_date"] = run_date
+        approach["snapshot_time_utc"] = snapshot_time_utc
+        approach["iss_tle_epoch_utc"] = iss_epoch
+
     print()
     print("Top 10 closest ISS passes in the next 24 hours")
     print(f"Debris group: {DEBRIS_GROUP}")
@@ -235,16 +267,21 @@ def main():
             f"{approach['relative_speed_km_s']:.3f}"
         )
 
-    with OUTPUT_CSV.open("w", newline="", encoding="utf-8") as handle:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(
             handle,
             fieldnames=[
+                "run_date",
+                "snapshot_time_utc",
                 "name",
                 "catalog",
                 "time_utc",
                 "miss_distance_km",
                 "relative_speed_km_s",
                 "altitude_km",
+                "tle_epoch_utc",
+                "iss_tle_epoch_utc",
                 "tle_age_days",
             ],
         )
@@ -252,17 +289,21 @@ def main():
         for approach in passes:
             writer.writerow(
                 {
+                    "run_date": approach["run_date"],
+                    "snapshot_time_utc": approach["snapshot_time_utc"],
                     "name": approach["name"],
                     "catalog": approach["catalog"],
                     "time_utc": approach["time_utc"],
                     "miss_distance_km": f"{approach['miss_distance_km']:.6f}",
                     "relative_speed_km_s": f"{approach['relative_speed_km_s']:.6f}",
                     "altitude_km": f"{approach['altitude_km']:.3f}",
+                    "tle_epoch_utc": approach["tle_epoch_utc"],
+                    "iss_tle_epoch_utc": approach["iss_tle_epoch_utc"],
                     "tle_age_days": f"{approach['tle_age_days']:.6f}",
                 }
             )
     print()
-    print(f"Saved {len(passes)} passes to {OUTPUT_CSV.name}")
+    print(f"Saved {len(passes)} passes to {output_path}")
     print("Each row is the closest minute for one debris object, not a danger label.")
 
 
