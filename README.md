@@ -256,3 +256,64 @@ unscaled step 3 w_miles -5356444425347776.0000 w_age -627708332185.9629 intercep
 ```
 
 By step 2 the miles weight is already `50216666.6667` and the loss has exploded. Comment the block out again when you are done looking.
+
+## Seventh exercise: will the shopper buy?
+
+`customer_buy_logistic.py` predicts a yes-or-no label: did a made-up shopper buy? The features are `visited_pricing_page` (0 or 1) and `minutes_on_site`. The label `bought` is 0 or 1. These 20 rows are example data, not real customers. The first 15 rows train. The last 5 are the test. The split is fixed. There is no shuffle.
+
+Minutes are scaled with the training mean and standard deviation only. The 0/1 feature is already on a small scale, so it is left as-is. The test rows do not help compute the mean or the spread.
+
+The model builds a weighted sum, then `sigmoid` turns that sum into a probability between 0 and 1:
+
+```text
+sigmoid(z) = 1 / (1 + e^(-z))
+```
+
+Log loss scores the probability given to the true answer. A probability of `0.99` on the right answer is a tiny loss (`0.0101`). A probability of `0.6` is in the middle (`0.5108`). A probability of `0.01` means the model was almost sure and wrong, so the loss is large (`4.6052`).
+
+Both feature weights come out positive. A positive weight pushes the probability toward buy. Visiting the pricing page raises the chance. More minutes on the site raises the chance.
+
+On the test set the script tries two cutoffs. At `0.5` it misses the buyer whose probability is `0.4599`, so recall is `0.6667` and precision is `1.0000`. At `0.3` that buyer is caught, so recall rises to `1.0000`. The non-buyer at probability `0.4364` is now called a buy too, so precision falls to `0.7500`.
+
+Precision is: of the rows we called buy, how many did buy. Recall is: of the real buyers, how many we caught.
+
+Run:
+
+```bash
+python3 customer_buy_logistic.py
+```
+
+### Expected output
+
+```text
+log loss at 0.99 0.0101
+log loss at 0.6 0.5108
+log loss at 0.01 4.6052
+train minutes mean 13.4667 spread 7.6670
+step 1 log loss 0.6931
+step 400 log loss 0.2912
+step 800 log loss 0.2908
+step 1200 log loss 0.2908
+step 1600 log loss 0.2908
+step 2000 log loss 0.2908
+weight visited_pricing_page 2.5360
+weight minutes_on_site 3.4022
+intercept -0.9364
+A positive weight pushes the probability toward buy.
+cutoff 0.5
+test visited 1 minutes 20 probability 0.9890 actual 1 guess 1
+test visited 0 minutes 28 probability 0.9960 actual 1 guess 1
+test visited 1 minutes 9.5 probability 0.4599 actual 1 guess 0
+test visited 0 minutes 15 probability 0.4364 actual 0 guess 0
+test visited 0 minutes 4 probability 0.0058 actual 0 guess 0
+tp 2 fp 0 fn 1 tn 2
+accuracy 0.8000 precision 1.0000 recall 0.6667
+cutoff 0.3
+test visited 1 minutes 20 probability 0.9890 actual 1 guess 1
+test visited 0 minutes 28 probability 0.9960 actual 1 guess 1
+test visited 1 minutes 9.5 probability 0.4599 actual 1 guess 1
+test visited 0 minutes 15 probability 0.4364 actual 0 guess 1
+test visited 0 minutes 4 probability 0.0058 actual 0 guess 0
+tp 3 fp 1 fn 0 tn 1
+accuracy 0.8000 precision 0.7500 recall 1.0000
+```
