@@ -201,3 +201,58 @@ prediction for x=4 11.0023
 ```
 
 Step 1 prints the raw signals from the lesson: `sum(error * x)` is `14.0` and `sum(error)` is `6.0`. The intercept column shows the dip and the return: `3.0000` at step 1, `2.7722` at step 200, then back to `2.9970` at step 2000. The slope is `2.0013` and the MSE is `0.000001`. For a new input `x = 4`, the prediction is `11.0023`, near the true value `11`.
+
+## Sixth exercise: miles and age together
+
+`car_price_multi.py` predicts a made-up price from two features, miles and age. One feature is not enough: two cars can have the same miles and different ages, and the age still changes the price. The rows are written by hand from `28000 - 0.2 * miles - 1000 * age`, plus a small fixed noise. This is example data, not real pricing advice.
+
+The first 9 rows train the weights. The last 3 are the test. The split is fixed. There is no random shuffle.
+
+Miles are numbers like `30000`. Age is a number like `4`. Gradient descent uses one learning rate for every weight. Those raw sizes do not share a step size fairly, so each feature is scaled: subtract the training mean, then divide by the training standard deviation (the spread). A typical scaled value is near `0`.
+
+The mean and the spread come from the training rows only. The test rows are the held-out check. If they helped compute those numbers, the test would leak into the setup, and the test would no longer be an independent check.
+
+The learning rate is `0.05` for 400 steps. The scaled weights are then turned back into a change per mile and per year.
+
+Run:
+
+```bash
+python3 car_price_multi.py
+```
+
+### Expected output
+
+```text
+train miles mean 30000.0000 spread 12909.9445
+train age mean 3.6667 spread 1.8856
+step 1 w_miles 0.0000 w_age 0.0000 intercept 0.0000 mse 352773333.3333
+step 100 w_miles -2533.6603 w_age -1939.3272 intercept 18343.9572 mse 16107.2982
+step 200 w_miles -2539.5936 w_age -1933.3940 intercept 18344.4444 mse 16078.9365
+step 300 w_miles -2539.7121 w_age -1933.2755 intercept 18344.4444 mse 16078.9253
+step 400 w_miles -2539.7145 w_age -1933.2731 intercept 18344.4444 mse 16078.9253
+scaled w_miles -2539.7145
+scaled w_age -1933.2731
+scaled intercept 18344.4444
+per mile -0.1967
+per year -1025.2729
+original intercept 28005.5415
+train mse 16078.9253
+test mse 2704.5988
+test miles 22000 age 4 predicted 19576.4903 actual 19500
+test miles 38000 age 5 predicted 15403.6104 actual 15450
+test miles 48000 age 8 predicted 10360.5373 actual 10350
+```
+
+The fit settles near the made-up rule: about `-0.1967` per mile, about `-1025.2729` per year, and an original intercept of `28005.5415`. Train MSE stays near `16078.9253` because the written-in noise keeps the rows off a perfect line. On these three test rows the predictions land close to the actual prices, and the test MSE is `2704.5988`.
+
+### Your turn
+
+Uncomment the experiment at the bottom of `car_price_multi.py` and run the file again. It trains again with the same learning rate, `0.05`, but without scaling. The run diverges. After the normal output, the extra lines are:
+
+```text
+unscaled step 1 w_miles 0.0000 w_age 0.0000 intercept 0.0000 mse 352773333.3333
+unscaled step 2 w_miles 50216666.6667 w_age 6066.6667 intercept 1834.4444 mse 2689827883106704581197824.0000
+unscaled step 3 w_miles -5356444425347776.0000 w_age -627708332185.9629 intercept -150649998739.0000 mse 30604264229616661895292190064421292212224.0000
+```
+
+By step 2 the miles weight is already `50216666.6667` and the loss has exploded. Comment the block out again when you are done looking.
