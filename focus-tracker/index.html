@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0e1420">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Focus">
+  <title>Focus tracker</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="top">
+      <button type="button" id="back-button" class="text-button" hidden>Back</button>
+      <p class="brand">Focus tracker</p>
+    </header>
+    <p id="status" class="status" role="status"></p>
+
+    <section id="screen-home" class="screen">
+      <h1>One-minute focus check</h1>
+      <p class="lead">Eight reaction taps, then a short digit-span. The score stays on this phone.</p>
+      <button type="button" id="start-check" class="primary">Start</button>
+      <button type="button" id="open-history" class="secondary">History</button>
+    </section>
+
+    <section id="screen-context" class="screen" hidden>
+      <h1>Before the check</h1>
+      <form id="context-form" novalidate>
+        <label class="field" for="sleep-hours">Hours of sleep last night</label>
+        <input id="sleep-hours" name="sleep" type="number" inputmode="decimal" min="0" max="16" step="0.5">
+
+        <fieldset>
+          <legend>Ate in the last 3 hours?</legend>
+          <div class="choices" data-choice-group="ate">
+            <button type="button" data-value="yes">Yes</button>
+            <button type="button" data-value="no">No</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Caffeine in the last 3 hours?</legend>
+          <div class="choices" data-choice-group="caffeine">
+            <button type="button" data-value="yes">Yes</button>
+            <button type="button" data-value="no">No</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>ADHD meds today?</legend>
+          <div class="choices" data-choice-group="meds">
+            <button type="button" data-value="yes">Yes</button>
+            <button type="button" data-value="no">No</button>
+            <button type="button" data-value="na">N/A</button>
+          </div>
+        </fieldset>
+
+        <div id="meds-hours-wrap" hidden>
+          <label class="field" for="hours-since-meds">Hours since the meds</label>
+          <input id="hours-since-meds" name="hours-since-meds" type="number" inputmode="decimal" min="0" max="24" step="0.5">
+        </div>
+
+        <fieldset>
+          <legend>Practice or workout today?</legend>
+          <div class="choices" data-choice-group="workout">
+            <button type="button" data-value="yes">Yes</button>
+            <button type="button" data-value="no">No</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>How focused do you feel? Optional, 1 to 10.</legend>
+          <div class="ratings" id="rating-choices">
+            <button type="button" data-rating="1">1</button>
+            <button type="button" data-rating="2">2</button>
+            <button type="button" data-rating="3">3</button>
+            <button type="button" data-rating="4">4</button>
+            <button type="button" data-rating="5">5</button>
+            <button type="button" data-rating="6">6</button>
+            <button type="button" data-rating="7">7</button>
+            <button type="button" data-rating="8">8</button>
+            <button type="button" data-rating="9">9</button>
+            <button type="button" data-rating="10">10</button>
+          </div>
+        </fieldset>
+
+        <p id="form-error" class="error" hidden></p>
+        <button type="submit" class="primary">Start the test</button>
+      </form>
+    </section>
+
+    <section id="screen-reaction-intro" class="screen" hidden>
+      <h1>Reaction time</h1>
+      <p class="lead">The screen turns yellow after a short wait. Tap as soon as you see yellow. A tap that is too early counts as a slow trial.</p>
+      <button type="button" id="begin-reaction" class="primary">Begin</button>
+    </section>
+
+    <section id="screen-reaction" class="screen screen-fill" hidden>
+      <button type="button" id="reaction-surface" class="reaction-surface">
+        <span id="reaction-count" class="eyebrow">Trial 1 of 8</span>
+        <span id="reaction-status" class="reaction-label">Wait for yellow</span>
+      </button>
+    </section>
+
+    <section id="screen-memory" class="screen" hidden>
+      <p id="memory-progress" class="eyebrow">Length 3 · misses 0</p>
+      <h1 id="memory-title">Watch</h1>
+      <p id="memory-digit" class="digit" aria-live="polite"></p>
+      <p id="memory-typed" class="typed" hidden></p>
+      <div id="memory-pad" class="pad" hidden>
+        <button type="button" data-digit="1">1</button>
+        <button type="button" data-digit="2">2</button>
+        <button type="button" data-digit="3">3</button>
+        <button type="button" data-digit="4">4</button>
+        <button type="button" data-digit="5">5</button>
+        <button type="button" data-digit="6">6</button>
+        <button type="button" data-digit="7">7</button>
+        <button type="button" data-digit="8">8</button>
+        <button type="button" data-digit="9">9</button>
+        <button type="button" id="memory-back" class="pad-wide">Delete</button>
+        <button type="button" data-digit="0">0</button>
+      </div>
+    </section>
+
+    <section id="screen-result" class="screen" hidden>
+      <p class="eyebrow">Saved on this phone</p>
+      <p id="result-score" class="score">0</p>
+      <h1>Focus score</h1>
+      <ul id="result-detail" class="detail"></ul>
+      <button type="button" id="result-done" class="primary">Done</button>
+      <button type="button" id="result-history" class="secondary">History</button>
+    </section>
+
+    <section id="screen-history" class="screen" hidden>
+      <h1>History</h1>
+      <div class="row-actions">
+        <button type="button" id="export-csv" class="secondary">Export CSV</button>
+        <button type="button" id="import-csv" class="secondary">Import CSV</button>
+        <input id="import-file" type="file" accept=".csv,text/csv" hidden>
+      </div>
+      <h2>Score by hour</h2>
+      <div id="hour-chart"></div>
+      <h2>Past checks</h2>
+      <div id="history-list"></div>
+      <button type="button" id="delete-all" class="danger">Delete all</button>
+      <div id="delete-panel" class="panel" hidden>
+        <p>Delete every saved check on this phone? This cannot be undone.</p>
+        <button type="button" id="confirm-delete" class="danger">Delete all</button>
+        <button type="button" id="cancel-delete" class="secondary">Cancel</button>
+      </div>
+    </section>
+  </div>
+  <noscript><p>This check needs JavaScript. It still keeps data on this phone only.</p></noscript>
+  <script src="logic.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

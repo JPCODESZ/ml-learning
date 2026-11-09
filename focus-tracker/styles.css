@@ -1,0 +1,301 @@
+:root {
+  color-scheme: dark;
+  --bg: #0e1420;
+  --card: #1b283c;
+  --text: #f4f7fb;
+  --muted: #b7c3d6;
+  --line: #31445f;
+  --yellow: #ffd84a;
+  --ink: #1a1400;
+  --danger: #ff8d7a;
+  --ok: #9dffc2;
+  --tap: 4.25rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+  font-size: 1.125rem;
+}
+
+body {
+  padding: env(safe-area-inset-top) 1rem env(safe-area-inset-bottom);
+}
+
+#app {
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  min-height: var(--tap);
+  border: 0;
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--card);
+  touch-action: manipulation;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+.primary {
+  width: 100%;
+  background: var(--yellow);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.secondary,
+.danger,
+.text-button {
+  width: 100%;
+  background: var(--card);
+}
+
+.danger {
+  color: var(--danger);
+}
+
+.text-button {
+  width: auto;
+  min-height: 3rem;
+  padding: 0.4rem 0.8rem;
+  background: transparent;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+}
+
+.brand {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 1.15;
+  margin: 0.25rem 0 0.75rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.lead,
+.detail,
+.panel p {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.screen[hidden] {
+  display: none !important;
+}
+
+.screen-fill {
+  min-height: calc(100dvh - 6rem);
+}
+
+.field,
+legend {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 650;
+}
+
+fieldset {
+  border: 0;
+  margin: 0.4rem 0 0;
+  padding: 0;
+}
+
+input[type="number"] {
+  width: 100%;
+  min-height: var(--tap);
+  border-radius: 1rem;
+  border: 2px solid var(--line);
+  background: var(--card);
+  padding: 0.75rem 1rem;
+  font-size: 1.25rem;
+}
+
+.choices,
+.ratings,
+.row-actions,
+.pad {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.choices {
+  grid-template-columns: 1fr 1fr;
+}
+
+.choices:has(button:nth-child(3)) {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.choices button[aria-pressed="true"],
+.ratings button[aria-pressed="true"] {
+  background: var(--yellow);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.ratings {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.pad {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.pad-wide {
+  grid-column: span 1;
+}
+
+.reaction-surface {
+  flex: 1;
+  width: 100%;
+  min-height: calc(100dvh - 7rem);
+  border-radius: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  background: #121826;
+  user-select: none;
+}
+
+.reaction-surface.is-go {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.reaction-surface.is-early {
+  background: #6e2430;
+}
+
+.reaction-label {
+  font-size: 2.4rem;
+  font-weight: 800;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.85rem;
+}
+
+.digit,
+.score {
+  margin: 0;
+  text-align: center;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.digit {
+  min-height: 5.5rem;
+  font-size: 5.5rem;
+  line-height: 1;
+}
+
+.typed {
+  margin: 0;
+  text-align: center;
+  font-size: 2rem;
+  letter-spacing: 0.3rem;
+}
+
+.score {
+  font-size: 6rem;
+  line-height: 0.9;
+}
+
+.detail {
+  padding-left: 1.2rem;
+}
+
+.error {
+  color: var(--danger);
+  margin: 0;
+}
+
+.status:empty {
+  display: none;
+}
+
+.history-card,
+.hour-row,
+.panel {
+  background: var(--card);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.history-card + .history-card,
+.hour-row + .hour-row {
+  margin-top: 0.6rem;
+}
+
+.history-card p,
+.hour-row p {
+  margin: 0.2rem 0;
+}
+
+.bar {
+  height: 0.8rem;
+  border-radius: 999px;
+  background: #2a3b55;
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  background: var(--yellow);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.panel[hidden] {
+  display: none !important;
+}
