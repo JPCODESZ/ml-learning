@@ -113,3 +113,52 @@ python3 fit_line.py
 ```
 
 The four lines are the slope, the intercept, the predicted price at 50000 miles, and the absolute error.
+
+## Fourth exercise: gradient descent
+
+`gradient_descent.py` nudges one slope so the loss gets smaller. The numbers are fictional. This is a teaching illustration, not a real trained model.
+
+The points are `x = [1, 2, 3, 4]` and `y = [2, 4, 6, 8]`. They sit on the line `y = 2 * x`, so the true slope is 2. The prediction is `slope * x` only. There is no intercept.
+
+The loss in this file is MSE (mean squared error). For each point, square the miss with `(predicted - actual) ** 2`, then average those squares. A smaller loss means the slope fits these points better.
+
+Gradient descent repeats the same loop: predict, measure the loss, nudge the slope, and repeat. The gradient is a formula from calculus (the derivative). You do not need to derive it. It tells which direction lowers the loss, and how steep that direction is. Subtracting it steps toward a lower loss.
+
+`learning_rate` is the step size. At `0.01`, twenty steps from slope `0` bring the loss down toward `0` and the slope toward `2`. A step that is too big overshoots and bounces. A tiny step still moves toward `2`, but slowly.
+
+Run:
+
+```bash
+python3 gradient_descent.py
+```
+
+### Expected output
+
+```text
+step 1 slope 0.0 mse 30.0
+step 2 slope 0.3 mse 21.675
+step 3 slope 0.555 mse 15.6602
+step 4 slope 0.7717 mse 11.3145
+step 5 slope 0.956 mse 8.1747
+step 6 slope 1.1126 mse 5.9062
+step 7 slope 1.2457 mse 4.2673
+step 8 slope 1.3588 mse 3.0831
+step 9 slope 1.455 mse 2.2275
+step 10 slope 1.5368 mse 1.6094
+step 11 slope 1.6063 mse 1.1628
+step 12 slope 1.6653 mse 0.8401
+step 13 slope 1.7155 mse 0.607
+step 14 slope 1.7582 mse 0.4385
+step 15 slope 1.7945 mse 0.3168
+step 16 slope 1.8253 mse 0.2289
+step 17 slope 1.8515 mse 0.1654
+step 18 slope 1.8738 mse 0.1195
+step 19 slope 1.8927 mse 0.0863
+step 20 slope 1.9088 mse 0.0624
+```
+
+### Your turn
+
+1. At the bottom of `gradient_descent.py`, uncomment the whole experiment block where `learning_rate = 0.2`. Run the file again. After the first 20 lines, a second run starts again at slope `0`. The slope jumps past `2` and the sign flips back and forth, while the MSE grows. That step size is too big. Comment the block out again when you are done.
+
+2. Change the first `learning_rate` from `0.01` to `0.001` and run the file again. The slope still moves toward `2`, but after 20 steps it is only about `0.5` and the loss is still large. That step size is slow. Put `0.01` back when you are finished.
