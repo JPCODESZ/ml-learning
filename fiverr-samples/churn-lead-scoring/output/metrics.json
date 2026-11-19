@@ -1,0 +1,84 @@
+{
+  "rows_after_cleanup": 45211,
+  "duplicate_rows_removed": 0,
+  "missing_cells": 52124,
+  "missing_by_column": {
+    "job": 288,
+    "education": 1857,
+    "contact": 13020,
+    "poutcome": 36959
+  },
+  "dropped_leakage_column": "duration",
+  "renamed_columns": {
+    "day_of_week": "day_of_month"
+  },
+  "train_yes_rate": 0.11698186241981863,
+  "test_yes_rate": 0.11699657193409267,
+  "logistic_cv_auc_mean": 0.7661798155437245,
+  "logistic_cv_auc_std": 0.004865557735113379,
+  "boosting_cv_auc_mean": 0.7989106889975094,
+  "boosting_cv_auc_std": 0.005617534444124858,
+  "test_auc": {
+    "constant_baseline": 0.5,
+    "previous_success_rule": 0.5866789455181205,
+    "logistic_regression": 0.7708444353957621,
+    "gradient_boosting": 0.7960229068444732
+  },
+  "previous_success_rule_on_test": {
+    "precision": 0.6735395189003437,
+    "recall": 0.18525519848771266,
+    "calls": 291
+  },
+  "threshold_chosen_on_training": {
+    "threshold": 0.75,
+    "precision": 0.5653002859866539,
+    "recall": 0.4204679744741196,
+    "calls": 3147
+  },
+  "boosting_on_test_at_chosen_threshold": {
+    "precision": 0.5488431876606684,
+    "recall": 0.40359168241965976,
+    "calls": 778
+  },
+  "boosting_on_test_at_0_5": {
+    "precision": 0.3397177419354839,
+    "recall": 0.6370510396975425,
+    "calls": 1984
+  },
+  "top_drivers": [
+    {
+      "feature": "month of the call",
+      "auc_drop": 0.06471449894828792
+    },
+    {
+      "feature": "phone or mobile",
+      "auc_drop": 0.060978713632484284
+    },
+    {
+      "feature": "day of the month",
+      "auc_drop": 0.024082844369108812
+    },
+    {
+      "feature": "previous campaign result",
+      "auc_drop": 0.018212787918746386
+    },
+    {
+      "feature": "housing loan",
+      "auc_drop": 0.00845278185823366
+    },
+    {
+      "feature": "account balance",
+      "auc_drop": 0.008451965109438353
+    },
+    {
+      "feature": "times contacted",
+      "auc_drop": 0.00757941698340332
+    },
+    {
+      "feature": "age",
+      "auc_drop": 0.006290350645645737
+    }
+  ],
+  "boosting_beats_logistic_on_test_auc": true,
+  "boosting_beats_simple_rule_on_test_auc": true
+}

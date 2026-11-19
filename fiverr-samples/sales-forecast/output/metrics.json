@@ -1,0 +1,114 @@
+{
+  "series": "Clothing and clothing access. stores",
+  "unit": "millions of U.S. dollars",
+  "adjustment": "not seasonally adjusted",
+  "validation_months": 24,
+  "validation_start": "2022-09",
+  "validation_end": "2024-08",
+  "holdout_months": 24,
+  "holdout_start": "2024-09",
+  "holdout_end": "2026-08",
+  "cleanup": {
+    "rows_read": 416,
+    "unparseable_dates": 0,
+    "non_numeric_sales": 0,
+    "sheets_read": 35,
+    "adjusted_values_left_out": 35,
+    "total_columns_left_out": 34,
+    "duplicate_months_removed": 0,
+    "missing_months": [],
+    "months_kept": 416,
+    "start": "1992-01",
+    "end": "2026-08"
+  },
+  "validation_seasonal_naive": {
+    "mae_million": 482.2083333333333,
+    "mape_percent": 2.1132037183536396
+  },
+  "validation_leaderboard": [
+    {
+      "name": "residual_boost_depth2",
+      "family": "residual boosting",
+      "mae_million": 1585.6008710052763,
+      "mape_percent": 7.010481939452716
+    },
+    {
+      "name": "residual_boost_depth3",
+      "family": "residual boosting",
+      "mae_million": 1277.2013081411203,
+      "mape_percent": 5.670272698424981
+    },
+    {
+      "name": "residual_boost_depth4",
+      "family": "residual boosting",
+      "mae_million": 1065.0047766604032,
+      "mape_percent": 4.771827707210861
+    },
+    {
+      "name": "yoy_boost",
+      "family": "year-over-year boosting",
+      "mae_million": 6690.408314350745,
+      "mape_percent": 28.708003688604578
+    },
+    {
+      "name": "seasonal_scaled_by_recent_growth",
+      "family": "year-over-year adjustment",
+      "mae_million": 665.8913136011329,
+      "mape_percent": 2.9114977080493922
+    },
+    {
+      "name": "holt_winters_add",
+      "family": "Holt-Winters",
+      "mae_million": 801.3728896506731,
+      "mape_percent": 3.4903638051980295
+    },
+    {
+      "name": "holt_winters_mul_season",
+      "family": "Holt-Winters",
+      "mae_million": 651.3816386451194,
+      "mape_percent": 2.6750872497368032
+    },
+    {
+      "name": "holt_winters_damped",
+      "family": "Holt-Winters",
+      "mae_million": 813.620068194659,
+      "mape_percent": 3.5180963048962512
+    },
+    {
+      "name": "holt_winters_season_only",
+      "family": "Holt-Winters",
+      "mae_million": 813.7162680776443,
+      "mape_percent": 3.5174823934835597
+    },
+    {
+      "name": "sarima_airline",
+      "family": "SARIMA",
+      "mae_million": 743.6740725031015,
+      "mape_percent": 3.2823398259237275
+    },
+    {
+      "name": "sarima_110_011",
+      "family": "SARIMA",
+      "mae_million": 734.669861289951,
+      "mape_percent": 3.234470697080053
+    },
+    {
+      "name": "sarima_111_110",
+      "family": "SARIMA",
+      "mae_million": 777.3054431034294,
+      "mape_percent": 3.4134046074574402
+    }
+  ],
+  "selected_model": "holt_winters_mul_season",
+  "selected_family": "Holt-Winters",
+  "baseline_seasonal_naive": {
+    "mae_million": 1174.5416666666667,
+    "mape_percent": 4.7478903200112
+  },
+  "selected_model_holdout": {
+    "mae_million": 993.2055431916134,
+    "mape_percent": 3.838537173067521
+  },
+  "selected_beats_baseline_on_mae": true,
+  "selected_beats_baseline_on_mape": true
+}

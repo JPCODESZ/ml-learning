@@ -9,6 +9,10 @@ A phone-friendly focus check lives in [`focus-tracker/`](focus-tracker/). It rec
 
 [`space-debris/close_pass.py`](space-debris/close_pass.py) estimates how close the ISS comes to objects in a real debris cloud over the next day. It is a starter for a later model, not a collision warning. See [`space-debris/README.md`](space-debris/README.md).
 
+## Portfolio samples
+
+Two small-business samples live in [`fiverr-samples/`](fiverr-samples/): a monthly sales forecast on public U.S. Census clothing-store sales, and a call-list score on the UCI Bank Marketing dataset. Each folder has a script, a chart, and a plain-English report.
+
 ## First exercise: a hand-written price rule
 
 `predict_price.py` is practice for `def`, `return`, calling a function, `print`, and a `for` loop.
